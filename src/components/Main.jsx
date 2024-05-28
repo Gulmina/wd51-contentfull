@@ -8,7 +8,7 @@ const Main = ({ allMovies }) => {
         <div className="container mx-auto p-4">
             <h2 className="text-3xl font-bold mb-6 text-center">Movie Lists</h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-[2fr_3fr] gap-10">
                 <section>
                     <h3 className="text-2xl font-semibold mb-4">Waiting List</h3>
                     <p className="flex justify-end items-center gap-2 my-2">Rating:
