@@ -5,6 +5,7 @@ import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Favorites from './pages/Favorites'
+import SearchPage from './pages/SearchPage'
 import { movies } from "./data/fakeMoviesList.json"
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
       <Header />
       <Routes>
         <Route path="/favorites" element={<Favorites favMovies={favMovies(moviesList)} />} />
-        <Route path="/catalog" element={<h2>Catalog</h2>} />
+        <Route path="/search" element={<SearchPage />} />
         <Route path="/" element={<Home allMovies={moviesList} />} />
         <Route path="/*" element={<div>404</div>} />
       </Routes>
