@@ -1,6 +1,6 @@
-import MovieList from "./MovieList";
+import MovieList from "../components/MovieList";
 
-const Main = ({ allMovies }) => {
+const Home = ({ allMovies }) => {
     const waitList = allMovies?.filter(movie => !movie.watched_date);
     const watchedList = allMovies?.filter(movie => movie.watched_date);
 
@@ -35,4 +35,4 @@ const Main = ({ allMovies }) => {
     )
 }
 
-export default Main;
+export default Home;
