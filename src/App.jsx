@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-
-import Footer from "./components/Footer"
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+ 
 import Header from "./components/Header"
-import Main from "./components/Main"
+import Footer from "./components/Footer"
+import Home from "./pages/Home"
+import Favorites from './pages/Favorites'
+import SearchPage from './pages/SearchPage'
 import { movies } from "./data/fakeMoviesList.json"
 
 function App() {
@@ -13,10 +16,9 @@ function App() {
   const fetchMovies =  () => {
     // const response = await fetch('')
     // const data = await response.json()
-   
     return movies; // return fake move from local
   }
-
+  
   useEffect(() => {
     const movies = fetchMovies()
     const fakeTimer = setTimeout(() => {
@@ -28,12 +30,21 @@ function App() {
     }
   }, [])
 
+  const favMovies = mL => mL.filter(movie => (
+    movie.my_rating > 3 && movie.watched_date
+  ))
+
   return (
-    <>
+    <BrowserRouter>
       <Header />
-      <Main allMovies={moviesList}/>
+      <Routes>
+        <Route path="/favorites" element={<Favorites favMovies={favMovies(moviesList)} />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/" element={<Home allMovies={moviesList} />} />
+        <Route path="/*" element={<div>404</div>} />
+      </Routes>
       <Footer />    
-    </>
+    </BrowserRouter>
   )
 }
 

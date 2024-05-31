@@ -3,8 +3,7 @@ const MovieCard = ({ movie }) => {
     // console.log('Movie', movie)
     const actorsList = movie.actors.join(', ');
     const genreList = movie.genre.join(', ');
-    const starRating = Array(5).fill().map((_, i) => movie.my_rating > i + 1 ? "★" : "☆").join(" ")
-    console.log('starRating', starRating)
+    const starRating = Array(5).fill().map((_, i) => movie.my_rating > i ? "★" : "☆").join(" ")
 
     return (
         <li className="bg-gray-300 p-2 rounded-lg shadow-md">
