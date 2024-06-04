@@ -31,7 +31,6 @@ const SearchPage = () => {
 
     const searchFormHandler = (e) => {
         e.preventDefault()
-        // const value = e.target.title.value
         fetchSearchResults(inputString)
     }
 
@@ -39,7 +38,6 @@ const SearchPage = () => {
         if (page > 0 && page <= totalPages) {
             setCurPage(page)
             fetchSearchResults(inputString, page)
-
         }
     }
 

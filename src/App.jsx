@@ -1,49 +1,50 @@
 import { useEffect, useState } from 'react'
+import { createClient } from 'contentful'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
- 
+
 import Header from "./components/Header"
 import Footer from "./components/Footer"
 import Home from "./pages/Home"
 import Favorites from './pages/Favorites'
 import SearchPage from './pages/SearchPage'
-import { movies } from "./data/fakeMoviesList.json"
 
 function App() {
-  const [moviesList, setMoviesList] = useState([])
+  const [cfList, setCfList] = useState([])
 
+  const cfClient = createClient({
+    space: import.meta.env.VITE_CF_SPACE,
+    accessToken: import.meta.env.VITE_CF_DELIVERY_KEY
+  })
 
-  // Fake fetch function
-  const fetchMovies =  () => {
-    // const response = await fetch('')
-    // const data = await response.json()
-    return movies; // return fake move from local
-  }
-  
   useEffect(() => {
-    const movies = fetchMovies()
-    const fakeTimer = setTimeout(() => {
-      setMoviesList(movies)
-    }, 1000)
-
-    return () => {
-      clearTimeout(fakeTimer)
+    const fetchCfMovies = async () => {
+      try {
+        const entries = await cfClient.getEntries({
+          content_type: 'watchedMovies'
+        })
+        console.log(entries)
+        setCfList(entries.items)
+      } catch (error) {
+        console.error(error)
+      }      
     }
-  }, [])
+    fetchCfMovies()
+  }, [cfClient])
 
   const favMovies = mL => mL.filter(movie => (
-    movie.my_rating > 3 && movie.watched_date
+     movie.fields.viewedDate && movie.fields.myRating > 3
   ))
 
   return (
     <BrowserRouter>
       <Header />
       <Routes>
-        <Route path="/favorites" element={<Favorites favMovies={favMovies(moviesList)} />} />
+        <Route path="/favorites" element={<Favorites favMovies={favMovies(cfList)} />} />
         <Route path="/search" element={<SearchPage />} />
-        <Route path="/" element={<Home allMovies={moviesList} />} />
+        <Route path="/" element={<Home cfMovies={cfList} />} />
         <Route path="/*" element={<div>404</div>} />
       </Routes>
-      <Footer />    
+      <Footer />
     </BrowserRouter>
   )
 }

@@ -1,39 +1,43 @@
 const MovieCard = ({ movie }) => {
-    
+
     // console.log('Movie', movie)
-    const actorsList = movie.actors.join(', ');
-    const genreList = movie.genre.join(', ');
-    const starRating = Array(5).fill().map((_, i) => movie.my_rating > i ? "★" : "☆").join(" ")
+    const starRating = Array(5).fill().map((_, i) => movie.myRating > i ? "★" : "☆").join(" ")
+    const imgParams = '?fm=webp&fit=pad&w=100'
+    const imgData = movie.picture.fields
+    console.log('Picture', imgData)
+    const imgUrl = `https:${imgData.file.url}${imgParams}`
 
     return (
-        <li className="bg-gray-300 p-2 rounded-lg shadow-md">
-            <h4 className="text-balance text-xl font-semibold mb-2 p-2">{movie.title}</h4>
-            <div className={`grid gap-4 items-end ${movie.watched_date ? 'grid-cols-[2fr_1fr]'  : '' }`}>
-                <div className="rounded-md bg-gray-100 p-2">
-                    <p className="text-gray-600"><strong>Released
-                        Date:</strong> {movie.realeased_date}</p>
-                    <p className="text-gray-600">
-                        <strong>Ratings:</strong> {movie.ratings[0]}/{movie.ratings[1]}</p>
-                    <p className="text-gray-600">
-                        <strong>Director:</strong> {movie.director}</p>
-                    <p className="text-gray-600">
-                        <strong>Actors:</strong> {actorsList}</p>
-                    <p className="text-gray-600">
-                        <strong>Duration:</strong> {movie.duration} mins</p>
-                    <p className="text-gray-600"><strong>Genre:</strong> {genreList}</p>
-                </div>
-                {
-                    movie.watched_date
-                    &&
-                    <div>
-                        <p className="text-gray-600"><strong>Date of
-                            Watch:</strong><br/>{movie.watched_date}</p>
+        <li className="grid gap-2 grid-cols-[100px_1fr] items-center bg-gray-300 p-2 rounded-lg shadow-md">
+            <img src={imgUrl} alt={imgData.title} className="w-full h-auto" />
+
+            <div className="">
+                <h4 className="text-sky-900 text-balance text-xl font-semibold mb-2 p-2">{movie.movieName}</h4>
+                <div className={`grid gap-4 items-end ${movie.viewedDate ? 'grid-cols-[2fr_1fr]' : ''}`}>
+                    <div className="rounded-md bg-gray-100 p-2">
+                        <p className="text-gray-600"><strong>Released
+                            Date:</strong> {movie?.year}</p>
                         <p className="text-gray-600">
-                                <strong>My rating:</strong><br/><span className="text-amber-500">{ starRating }</span> </p>
+                            <strong>Ratings:</strong> {movie?.ratings} / 10</p>
                         <p className="text-gray-600">
-                            <strong>Feedback:</strong><br/>{movie.feedback}</p>
+                            <strong>Duration:</strong> {movie?.durationOfMovie} mins</p>
+                        <p className="text-gray-600"><strong>Genre:</strong> {movie.genre}</p>
                     </div>
-                }
+                    {
+                        movie.viewedDate
+                        &&
+                        <div>
+                            <p className="text-gray-600">
+                                <strong>Date of Watch:</strong>
+                                <br />{movie.viewedDate}
+                            </p>
+                            <p className="text-gray-600">
+                                <strong>My rating:</strong><br />
+                                <span className="text-amber-500">{starRating}</span>
+                            </p>
+                        </div>
+                    }
+                </div>
             </div>
         </li>
     )
