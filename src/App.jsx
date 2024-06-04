@@ -8,13 +8,14 @@ import Home from "./pages/Home"
 import Favorites from './pages/Favorites'
 import SearchPage from './pages/SearchPage'
 
+const cfClient = createClient({
+  space: import.meta.env.VITE_CF_SPACE,
+  accessToken: import.meta.env.VITE_CF_DELIVERY_KEY
+})
+
 function App() {
   const [cfList, setCfList] = useState([])
 
-  const cfClient = createClient({
-    space: import.meta.env.VITE_CF_SPACE,
-    accessToken: import.meta.env.VITE_CF_DELIVERY_KEY
-  })
 
   useEffect(() => {
     const fetchCfMovies = async () => {
@@ -22,14 +23,13 @@ function App() {
         const entries = await cfClient.getEntries({
           content_type: 'watchedMovies'
         })
-        console.log(entries)
         setCfList(entries.items)
       } catch (error) {
         console.error(error)
       }      
     }
     fetchCfMovies()
-  }, [cfClient])
+  }, [])
 
   const favMovies = mL => mL.filter(movie => (
      movie.fields.viewedDate && movie.fields.myRating > 3

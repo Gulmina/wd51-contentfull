@@ -4,7 +4,6 @@ const MovieCard = ({ movie }) => {
     const starRating = Array(5).fill().map((_, i) => movie.myRating > i ? "★" : "☆").join(" ")
     const imgParams = '?fm=webp&fit=pad&w=100'
     const imgData = movie.picture.fields
-    console.log('Picture', imgData)
     const imgUrl = `https:${imgData.file.url}${imgParams}`
 
     return (
