@@ -36,7 +36,7 @@ function App() {
   ))
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/wd51-contentfull">
       <Header />
       <Routes>
         <Route path="/favorites" element={<Favorites favMovies={favMovies(cfList)} />} />
