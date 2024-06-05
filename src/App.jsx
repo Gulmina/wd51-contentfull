@@ -1,34 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import { createClient } from 'contentful'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+
+import Header from "./components/Header"
+import Footer from "./components/Footer"
+import Home from "./pages/Home"
+import Favorites from './pages/Favorites'
+import SearchPage from './pages/SearchPage'
+
+const cfClient = createClient({
+  space: import.meta.env.VITE_CF_SPACE,
+  accessToken: import.meta.env.VITE_CF_DELIVERY_KEY
+})
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [cfList, setCfList] = useState([])
+
+
+  useEffect(() => {
+    const fetchCfMovies = async () => {
+      try {
+        const entries = await cfClient.getEntries({
+          content_type: 'watchedMovies'
+        })
+        setCfList(entries.items)
+      } catch (error) {
+        console.error(error)
+      }      
+    }
+    fetchCfMovies()
+  }, [])
+
+  const favMovies = mL => mL.filter(movie => (
+     movie.fields.viewedDate && movie.fields.myRating > 3
+  ))
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <BrowserRouter>
+      <Header />
+      <Routes>
+        <Route path="/favorites" element={<Favorites favMovies={favMovies(cfList)} />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/" element={<Home cfMovies={cfList} />} />
+        <Route path="/*" element={<div>404</div>} />
+      </Routes>
+      <Footer />
+    </BrowserRouter>
   )
 }
 
