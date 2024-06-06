@@ -75,7 +75,7 @@ const SearchPage = () => {
                                     />
                                 }
                             </div>
-                            <SearchMoviePreview imdbID={selectedMovie} />
+                            <SearchMoviePreview imdbID={selectedMovie} btnStyle={btnStyle} />
                         </div>
                     :   <p>Error: {searchResult?.Error}</p>
                 )
