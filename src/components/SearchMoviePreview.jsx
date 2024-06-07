@@ -3,7 +3,7 @@ import SearchMovieCard from "./SearchMovieCard";
 const apiKey = import.meta.env.VITE_OMDB_API_KEY_II
 const apiURL = `https://www.omdbapi.com/?apikey=${apiKey}`;
 
-const SearchMoviePreview = ({ imdbID, btnStyle }) => {
+const SearchMoviePreview = ({ imdbID, setCfList, btnStyle }) => {
 
     const [movieData, setMovieData] = useState(null)
 
@@ -26,7 +26,7 @@ const SearchMoviePreview = ({ imdbID, btnStyle }) => {
     return (
         <div className="bg-white rounded-md shadow-sm overflow-hidden" >
         {movieData
-                ? <SearchMovieCard movieData={movieData} btnStyle={btnStyle} />               
+                ? <SearchMovieCard movieData={movieData} setCfList={setCfList} btnStyle={btnStyle} />               
             : <div className="min-h-full grid place-content-center p-4">Select movie from list</div>
         }
         </div >
