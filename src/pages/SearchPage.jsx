@@ -5,7 +5,7 @@ import SearchForm from '../components/SearchForm';
 import PrevNextBtns from '../components/PrevNextBtns';
 import SearchMoviePreview from '../components/SearchMoviePreview';
 
-const SearchPage = () => {
+const SearchPage = ({ setCfList, btnStyle }) => {
     const [searchResult, setSearchResult] = useState(null);
     const [inputString, setInputString] = useState('');
     const [curPage, setCurPage] = useState(1);
@@ -15,8 +15,6 @@ const SearchPage = () => {
     // const apiKey = import.meta.env.VITE_OMDB_API_KEY
     const apiKey = import.meta.env.VITE_OMDB_API_KEY_II
     const apiURL = `https://www.omdbapi.com/?apikey=${apiKey}`;
-
-    const btnStyle = "border border-gray-300 bg-sky-800 text-white px-4 py-2 rounded-md";
 
     const fetchSearchResults = async (searchString, page = 1) => {
         const urlString = encodeURIComponent(searchString.trim().toLowerCase())
@@ -75,7 +73,7 @@ const SearchPage = () => {
                                     />
                                 }
                             </div>
-                            <SearchMoviePreview imdbID={selectedMovie} btnStyle={btnStyle} />
+                            <SearchMoviePreview imdbID={selectedMovie} setCfList={setCfList}  btnStyle={btnStyle} />
                         </div>
                     :   <p>Error: {searchResult?.Error}</p>
                 )

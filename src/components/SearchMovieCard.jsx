@@ -1,31 +1,52 @@
-const SearchMovieCard = ({ movieData, btnStyle }) => {
+const fields = {
+    Title: { show: false, hideTitle: true },
+    Year: { show: false, hideTitle: true },
+    Runtime: { show: false },
+    Genre: { show: false },
+    Director: { show: true },
+    Actors: { show: true },
+    Writer: { show: true },
+    Plot: { show: false, hideTitle: true },
+    Rated: { show: true },
+    Released: { show: true },
+    Ratings: { show: false },
+    Language: { show: true },
+    Country: { show: true },
+    Awards: { show: true },
+    Metascore: { show: true },
+    imdbRating: { show: true },
+    imdbVotes: { show: true },
+    imdbID: { show: false },
+    Type: { show: true },
+    DVD: { show: false },
+    BoxOffice: { show: true },
+    Production: { show: false },
+    Website: { show: false },
+    Response: { show: false },
+    Poster: { show: false },
+}
 
-    const fields = {
-        Title: { show: false, hideTitle: true },
-        Year: { show: false, hideTitle: true },
-        Runtime: { show: false },
-        Genre: { show: false },
-        Director: { show: true },
-        Actors: { show: true },
-        Writer: { show: true },
-        Plot: { show: false, hideTitle: true },
-        Rated: { show: true },
-        Released: { show: true },
-        Ratings: { show: false },
-        Language: { show: true },
-        Country: { show: true },
-        Awards: { show: true },
-        Metascore: { show: true },
-        imdbRating: { show: true },
-        imdbVotes: { show: true },
-        imdbID: { show: false },
-        Type: { show: true },
-        DVD: { show: false },
-        BoxOffice: { show: true },
-        Production: { show: false },
-        Website: { show: false },
-        Response: { show: false },
-        Poster: { show: false },
+const SearchMovieCard = ({ movieData, setCfList, btnStyle }) => {
+    const handleAddBtn = () => {
+        const newMovie = {
+            sys: {
+                id: movieData.imdbID,
+            },
+            fields: {
+                movieName: movieData.Title,
+                genre: movieData.Genre,
+                durationOfMovie: parseInt(movieData.Runtime),
+                ratings: Math.floor(+movieData.imdbRating),
+                year: +movieData.Year,
+                picture: { fields: { title: movieData.Title, file: { url: movieData?.Poster?.split('https:')[1] } } }
+            }
+        }
+
+        setCfList(cfl => {
+            if (cfl.length === 0) return [newMovie]
+            if (cfl.find(movie => movie.fields.movieName === newMovie.fields.movieName)) return cfl
+            return [newMovie, ...cfl]
+        })
     }
 
     return (
@@ -50,7 +71,7 @@ const SearchMovieCard = ({ movieData, btnStyle }) => {
                     )
                 ))}
                 <div className="text-center">
-                    <button className={btnStyle}>Add to waiting list</button>
+                    <button onClick={handleAddBtn} className={btnStyle}>Add to waiting list (beta)</button>
                 </div>
             </div>
         </div>

@@ -8,6 +8,10 @@ import Home from "./pages/Home"
 import Favorites from './pages/Favorites'
 import SearchPage from './pages/SearchPage'
 
+
+
+const btnStyle = "border border-gray-300 bg-sky-800 text-white px-4 py-2 rounded-md";
+
 const cfClient = createClient({
   space: import.meta.env.VITE_CF_SPACE,
   accessToken: import.meta.env.VITE_CF_DELIVERY_KEY
@@ -40,8 +44,8 @@ function App() {
       <Header />
       <Routes>
         <Route path="/favorites" element={<Favorites favMovies={favMovies(cfList)} />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/" element={<Home cfMovies={cfList} />} />
+        <Route path="/search" element={<SearchPage setCfList={setCfList} btnStyle={btnStyle} />} />
+        <Route path="/" element={<Home cfMovies={cfList} setCfList={setCfList} btnStyle={btnStyle} />} />
         <Route path="/*" element={<div>404</div>} />
       </Routes>
       <Footer />
