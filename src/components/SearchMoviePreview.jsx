@@ -23,6 +23,8 @@ const SearchMoviePreview = ({ imdbID, setCfList, btnStyle }) => {
             : setMovieData(null)
     }, [imdbID])
 
+    console.log(movieData)
+
     return (
         <div className="bg-white rounded-md shadow-sm overflow-hidden" >
         {movieData

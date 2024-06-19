@@ -27,8 +27,8 @@ const fields = {
 }
 
 const SearchMovieCard = ({ movieData, setCfList, btnStyle }) => {
-    const handleAddBtn = () => {
-        const newMovie = {
+    const handleAddBtn = async () => {
+        const localNewMovie = {
             sys: {
                 id: movieData.imdbID,
             },
@@ -43,11 +43,28 @@ const SearchMovieCard = ({ movieData, setCfList, btnStyle }) => {
         }
 
         setCfList(cfl => {
-            if (cfl.length === 0) return [newMovie]
-            if (cfl.find(movie => movie.fields.movieName === newMovie.fields.movieName)) return cfl
-            return [newMovie, ...cfl]
+            if (cfl.length === 0) return [localNewMovie]
+            if (cfl.find(movie => movie.fields.movieName === localNewMovie.fields.movieName)) return cfl
+            return [localNewMovie, ...cfl]
         })
+
+        try {
+            const response = await fetch(import.meta.env.VITE_MOVIE_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(movieData),
+            })
+            const data = await response.json()
+            console.log(data)            
+            
+        } catch (error) {
+            console.error("Add movie error", error)
+        }
     }
+
+console.log(typeof movieData)
 
     return (
         
