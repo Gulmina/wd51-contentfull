@@ -12,12 +12,13 @@ const btnStyle = "border border-gray-300 bg-sky-800 text-white px-4 py-2 rounded
 function App() {
   const [movieList, setMovieList] = useState([])
   const [showDeleted, setShowDeleted] = useState(false)
+  const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
 
   useEffect(() => {
     const fetchMovies = async () => {
       const delQuery = showDeleted ? '?del=true' : ''
       try {
-        const response = await fetch(`${import.meta.env.VITE_MOVIE_URL}${delQuery}`)
+        const response = await fetch(`${movieServerURL}${delQuery}`)
         const data = await response.json()
         
         setMovieList(data)

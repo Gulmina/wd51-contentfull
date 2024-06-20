@@ -1,3 +1,5 @@
+const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
+
 const MovieCard = ({ movieObj, setMovieList, btnStyle, showDeleted }) => {
 
     const movieData = movieObj
@@ -8,7 +10,7 @@ const MovieCard = ({ movieObj, setMovieList, btnStyle, showDeleted }) => {
 
     const handleRemoveBtn = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_MOVIE_URL}/${movieData.imdbid}`, {
+            const res = await fetch(`${movieServerURL}/${movieData.imdbid}`, {
                 method: 'DELETE'
             })
             const data = await res.json()
@@ -32,7 +34,7 @@ const MovieCard = ({ movieObj, setMovieList, btnStyle, showDeleted }) => {
         const rating = Math.floor(Math.random() * 6)
         const myMovieData = { vieweddate: dateStr, myrating: rating }
         try {
-            const res = await fetch(`${import.meta.env.VITE_MOVIE_URL}/${movieData.imdbid}`, {
+            const res = await fetch(`${movieServerURL}/${movieData.imdbid}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

@@ -27,12 +27,14 @@ const fields = {
     Poster: { show: false },
 }
 
+const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
+
 const SearchMovieCard = ({ movieData, setSelectedMovie, setMovieList, btnStyle }) => {
     const addedDialog = useRef(null)
 
     const handleAddBtn = async () => {
         try {
-            const response = await fetch(import.meta.env.VITE_MOVIE_URL, {
+            const response = await fetch(movieServerURL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
