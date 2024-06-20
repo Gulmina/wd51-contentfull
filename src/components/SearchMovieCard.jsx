@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 const fields = {
     Title: { show: false, hideTitle: true },
     Year: { show: false, hideTitle: true },
@@ -26,31 +27,42 @@ const fields = {
     Poster: { show: false },
 }
 
-const SearchMovieCard = ({ movieData, setCfList, btnStyle }) => {
-    const handleAddBtn = () => {
-        const newMovie = {
-            sys: {
-                id: movieData.imdbID,
-            },
-            fields: {
-                movieName: movieData.Title,
-                genre: movieData.Genre,
-                durationOfMovie: parseInt(movieData.Runtime),
-                ratings: Math.floor(+movieData.imdbRating),
-                year: +movieData.Year,
-                picture: { fields: { title: movieData.Title, file: { url: movieData?.Poster?.split('https:')[1] } } }
-            }
-        }
+const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
 
-        setCfList(cfl => {
-            if (cfl.length === 0) return [newMovie]
-            if (cfl.find(movie => movie.fields.movieName === newMovie.fields.movieName)) return cfl
-            return [newMovie, ...cfl]
-        })
+const SearchMovieCard = ({ movieData, setSelectedMovie, setMovieList, btnStyle }) => {
+    const addedDialog = useRef(null)
+
+    const handleAddBtn = async () => {
+        try {
+            const response = await fetch(movieServerURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(movieData),
+            })
+            const addedMovie = await response.json()
+            if (addedMovie.imdbid) {
+
+                setMovieList(ml => {
+                    if (ml.length === 0) return [addedMovie]
+                    if (ml.find(movie => movie.imdbid === addedMovie.imdbid)) return ml
+                        return [addedMovie, ...ml]
+                    })
+        
+                addedDialog.current.showModal()
+                setTimeout(() => {
+                    addedDialog.current.close()
+                setSelectedMovie(null)
+                }, 3000)
+            }
+
+        } catch (error) {
+            console.error("Add movie error", error)
+        }
     }
 
     return (
-        
         <div className="grid [grid-template-areas:'card'] min-h-full ">
             {
                 movieData?.Poster !== 'N/A'
@@ -71,9 +83,12 @@ const SearchMovieCard = ({ movieData, setCfList, btnStyle }) => {
                     )
                 ))}
                 <div className="text-center">
-                    <button onClick={handleAddBtn} className={btnStyle}>Add to waiting list (beta)</button>
+                    <button onClick={handleAddBtn} className={btnStyle}>Add to waiting list</button>
                 </div>
             </div>
+            <dialog ref={addedDialog} className="py-8 px-4 bg-sky-900 text-white rounded-md">
+                <p>Movie added to the waiting list</p>
+            </dialog>
         </div>
     )
 }

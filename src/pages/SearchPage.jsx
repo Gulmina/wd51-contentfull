@@ -5,7 +5,7 @@ import SearchForm from '../components/SearchForm';
 import PrevNextBtns from '../components/PrevNextBtns';
 import SearchMoviePreview from '../components/SearchMoviePreview';
 
-const SearchPage = ({ setCfList, btnStyle }) => {
+const SearchPage = ({ setMovieList, btnStyle }) => {
     const [searchResult, setSearchResult] = useState(null);
     const [inputString, setInputString] = useState('');
     const [curPage, setCurPage] = useState(1);
@@ -73,12 +73,11 @@ const SearchPage = ({ setCfList, btnStyle }) => {
                                     />
                                 }
                             </div>
-                            <SearchMoviePreview imdbID={selectedMovie} setCfList={setCfList}  btnStyle={btnStyle} />
+                            <SearchMoviePreview imdbID={selectedMovie} setSelectedMovie={setSelectedMovie} setMovieList={setMovieList}  btnStyle={btnStyle} />
                         </div>
                     :   <p>Error: {searchResult?.Error}</p>
                 )
             }
-
         </section>
     )
 }
