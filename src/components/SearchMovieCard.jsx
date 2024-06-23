@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 const fields = {
     Title: { show: false, hideTitle: true },
     Year: { show: false, hideTitle: true },
@@ -31,9 +31,12 @@ const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserve
 
 const SearchMovieCard = ({ movieData, setSelectedMovie, setMovieList, btnStyle }) => {
     const addedDialog = useRef(null)
+    const [dialogText, setDialogText] = useState('')
 
     const handleAddBtn = async () => {
         try {
+            setDialogText('Movie is adding on the waiting list')
+            addedDialog.current?.showModal()
             const response = await fetch(movieServerURL, {
                 method: 'POST',
                 headers: {
@@ -47,18 +50,17 @@ const SearchMovieCard = ({ movieData, setSelectedMovie, setMovieList, btnStyle }
                 setMovieList(ml => {
                     if (ml.length === 0) return [addedMovie]
                     if (ml.find(movie => movie.imdbid === addedMovie.imdbid)) return ml
-                        return [addedMovie, ...ml]
-                    })
-        
-                addedDialog.current.showModal()
-                setTimeout(() => {
-                    addedDialog.current.close()
-                setSelectedMovie(null)
-                }, 3000)
+                    return [addedMovie, ...ml]
+                })
+                setDialogText('Movie added')
             }
-
         } catch (error) {
             console.error("Add movie error", error)
+        } finally {
+            setTimeout(() => {
+                if (dialogText === 'Movie added') setSelectedMovie(null)
+                addedDialog.current?.close();
+            }, 3000);
         }
     }
 
@@ -86,8 +88,8 @@ const SearchMovieCard = ({ movieData, setSelectedMovie, setMovieList, btnStyle }
                     <button onClick={handleAddBtn} className={btnStyle}>Add to waiting list</button>
                 </div>
             </div>
-            <dialog ref={addedDialog} className="py-8 px-4 bg-sky-900 text-white rounded-md">
-                <p>Movie added to the waiting list</p>
+            <dialog ref={addedDialog} className="py-8 px-4 bg-sky-900 text-white rounded-md backdrop:bg-gray-400/75 animate-pulse" >
+                <p>{dialogText}</p>
             </dialog>
         </div>
     )
