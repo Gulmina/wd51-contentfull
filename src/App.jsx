@@ -7,12 +7,12 @@ import Home from "./pages/Home"
 import Favorites from './pages/Favorites'
 import SearchPage from './pages/SearchPage'
 
+const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
 const btnStyle = "border border-gray-300 bg-sky-800 text-white px-4 py-2 rounded-md";
 
 function App() {
   const [movieList, setMovieList] = useState([])
   const [showDeleted, setShowDeleted] = useState(false)
-  const movieServerURL = import.meta.env.VITE_MOVIE_URL || 'https://moviebuffserver.onrender.com/api/v1/movies'
 
   useEffect(() => {
     const fetchMovies = async () => {
